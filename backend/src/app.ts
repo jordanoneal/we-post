@@ -1,17 +1,19 @@
-import dotenv from 'dotenv';
 import express from 'express';
-
-dotenv.config({
-    path: '.env'
-});
+import { APP_PORT } from './environment';
+import { initializeDB } from './data-source';
 
 class Server {
     public app = express();
 }
 
+const PORT = APP_PORT || 3000;
 const server = new Server();
-const PORT = process.env.APP_PORT || 5000;
 
-server.app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const runServer = async () => {
+    await initializeDB();
+    server.app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+runServer();
