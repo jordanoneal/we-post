@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "paths": {
+      "common/*": ["common/src/*"],
+      "backend/*": ["backend/src/*"],
+      "frontend/*": ["frontend/src/*"]
+    }
+  },
+  "include": ["packages/**/*"]
+}
