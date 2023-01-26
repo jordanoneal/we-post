@@ -1,11 +1,16 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./packages",
-    "paths": {
-      "common/*": ["common/src/*"],
-      "backend/*": ["backend/src/*"],
-      "frontend/*": ["frontend/src/*"]
-    }
-  },
-  "include": ["packages/**/*"]
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+    },
+    "include": [
+        "packages/**/*.ts"
+    ],
+    "references": [
+        { "path": "./packages/frontend/tsconfig.json" },
+        { "path": "./packages/backend/tsconfig.json" },
+        { "path": "./packages/common/tsconfig.json" }
+    ]
 }

@@ -1,10 +1,14 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { IComment, IPost, IUser } from "common/interfaces";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { IComment, ICreateCommentParams, IPost, IUser } from "common.interfaces";
 import { User } from "./user";
 import { Post } from "./post";
 
 @Entity()
 export class Comment implements IComment {
+    constructor(data?: ICreateCommentParams) {
+        if (data) Object.assign(this, data);
+    }
+
     @PrimaryGeneratedColumn()
     id!: number;
 

@@ -1,9 +1,22 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "paths": {
+      "common.interfaces": ["../common/lib/interfaces"],
+      // "backend.services": ["./dist/services"],
+      // "backend.entities": ["./dist/entities"]
+      // "common.interfaces": ["../common/src/interfaces"],
+      "backend.services": ["./src/services"],
+      "backend.entities": ["./src/entities"]
+    },
+    "declaration": true,
+    "declarationMap": true,
     "experimentalDecorators": true,
-    "outDir": "../../dist/backend",
-    "esModuleInterop": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [{ "path": "../common/tsconfig.json" }]
 }

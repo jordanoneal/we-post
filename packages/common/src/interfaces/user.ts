@@ -19,3 +19,10 @@ export interface IUser {
     updatedAt: Date;
     deletedAt: Date | null;
 }
+
+export interface ICreateUserParams {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+}

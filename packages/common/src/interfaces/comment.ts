@@ -4,7 +4,7 @@ import { IUser } from "./user";
 export interface IComment {
     id: number;
     text: string;
-    
+
     author: IUser;
     post: IPost;
 
@@ -13,12 +13,12 @@ export interface IComment {
     deletedAt: Date | null;
 }
 
-export interface ICreateComment {
+export interface ICreateCommentParams {
     text: string;
     postId: number;
     authorId: number;
 }
 
-export interface IUpdateComment {
+export interface IUpdateCommentParams {
     text?: string;
 }
