@@ -1,15 +1,10 @@
-// import { Post } from "backend.entities";
 import { Post } from "../entities/post";
 import { getRepository, Repository } from "typeorm";
-import { ICreatePostParams, IPost } from "common.interfaces";
-// import { UserService } from "./user-service";
+import { ICreatePostParams, IPost, IUpdatePostParams } from "common.interfaces";
 import { UserService } from "./user-service";
 
 class PostService {
-    private postRepository: Repository<Post>;
-    constructor() {
-        this.postRepository = getRepository(Post);
-    }
+    private postRepository!: Repository<Post>;
 
     public getPostRepository(): Repository<Post> {
         if (this.postRepository) return this.postRepository;
@@ -31,15 +26,31 @@ class PostService {
     }
 
     public async createPost(params: ICreatePostParams): Promise<IPost> {
-        const author = await UserService.retrieveUserById(params.authorId);
-        if (!author) throw new Error('Could not retrieve Post author');
+        // If no params.authorId is provided, throw an error
+        if (!params.authorId) throw new Error('No authorId provided');
 
         const post = new Post();
         post.title = params.title;
         post.text = params.text;
-        post.author = author;
+        post.author = await UserService.retrieveUserById(params.authorId);
 
         return await this.getPostRepository().save(post);
+    }
+
+    public async updatePost(id: number, params: IUpdatePostParams): Promise<IPost> {
+        const post = await this.retrievePostById(id);
+        if (!post) throw new Error('Post does not exist');
+
+        const updatedPost = Object.assign(post, params);
+        return await this.getPostRepository().save(updatedPost);
+    }
+
+    public async deletePost(id: number): Promise<boolean> {
+        const post = await this.retrievePostById(id);
+        if (!post) throw new Error('Post does not exist');
+
+        await this.getPostRepository().delete({ id: post.id });
+        return true;
     }
 }
 

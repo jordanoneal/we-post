@@ -1,7 +1,6 @@
 import express from 'express';
-// import { UserService } from 'backend.services';
 import { UserService } from '../services/user-service';
-import { ICreateUserParams } from 'common.interfaces';
+import { ICreateUserParams, IUpdateUserParams } from 'common.interfaces';
 
 const user = express.Router();
 
@@ -17,6 +16,7 @@ user.route('/')
     .post(async (req, res) => {
         try {
             const params = req.body as ICreateUserParams;
+            console.log(params);
             const user = await UserService.createUser(params);
             return res.status(201).json(user);
         } catch (error: any) {
@@ -34,6 +34,17 @@ user.route('/:id')
 
         } catch (error: any) {
             return res.status(400).json(error.toString());
+        }
+    })
+    .patch(async (req, res) => {
+        try {
+            const updateParams = req.body as IUpdateUserParams;
+            const id = parseInt(req.params.id);
+
+            const response = await UserService.updateUser(id, updateParams);
+            return res.status(200).json(response);
+        } catch (err: any) {
+            return res.status(400).json(err.toString());
         }
     })
 

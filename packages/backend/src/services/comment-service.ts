@@ -1,14 +1,11 @@
 import { getRepository, Repository } from 'typeorm';
-// import { Comment } from 'backend.entities';
 import { Comment } from '../entities/comment'
-
-import { IComment, ICreateCommentParams } from 'common.interfaces';
+import { IComment, ICreateCommentParams, IUpdateCommentParams } from 'common.interfaces';
+import { PostService } from './post-service';
+import { UserService } from './user-service';
 
 class CommentService {
-    private commentRepository: Repository<Comment>;
-    constructor() {
-        this.commentRepository = getRepository(Comment);
-    }
+    private commentRepository!: Repository<Comment>;
 
     public getCommentRepository(): Repository<Comment> {
         if (this.commentRepository) return this.commentRepository;
@@ -31,13 +28,31 @@ class CommentService {
     }
 
     public async createComment(params: ICreateCommentParams): Promise<IComment> {
-        const createParams = {
-            text: params.text,
-            postId: params.postId,
-            authorId: params.authorId
-        };
-        const comment = new Comment(createParams);
+        if (!params.authorId) throw new Error('No authorId provided');
+        if (!params.postId) throw new Error('No postId provided');
+
+        const comment = new Comment();
+        comment.text = params.text;
+        comment.post = await PostService.retrievePostById(params.postId);
+        comment.author = await UserService.retrieveUserById(params.authorId);
+
         return await this.getCommentRepository().save(comment);
+    }
+
+    public async updateComment(id: number, params: IUpdateCommentParams): Promise<IComment> {
+        const comment = await this.retrieveCommentById(id);
+        if (!comment) throw new Error('Comment does not exist');
+
+        const updatedComment = Object.assign(comment, params);
+        return await this.getCommentRepository().save(updatedComment);
+    }
+
+    public async deleteComment(id: number): Promise<boolean> {
+        const comment = await this.retrieveCommentById(id);
+        if (!comment) throw new Error('Comment does not exist');
+
+        await this.getCommentRepository().delete({ id: comment.id });
+        return true;
     }
 }
 

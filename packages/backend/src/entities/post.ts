@@ -24,7 +24,7 @@ export class Post implements IPost {
     @OneToMany(() => Comment, (comment) => comment.post)
     comments!: IComment[];
 
-    @Column()
+    @Column({ default: 0})
     likes!: number;
 
     @CreateDateColumn()

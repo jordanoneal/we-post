@@ -1,13 +1,9 @@
-// import { User } from "backend.entities";
-import { ICreateUserParams, IUser } from "common.interfaces";
+import { ICreateUserParams, IUpdateUserParams, IUser } from "common.interfaces";
 import { getRepository, Repository } from "typeorm";
 import { User } from "../entities/user";
 
 class UserService {
-    private userRepository: Repository<User>;
-    constructor() {
-        this.userRepository = getRepository(User);
-    }
+    private userRepository!: Repository<User>;
 
     public getUserRepository(): Repository<User> {
         if (this.userRepository) return this.userRepository;
@@ -32,6 +28,16 @@ class UserService {
         const user = new User({ ...params });
 
         return await this.getUserRepository().save(user);
+    }
+
+    public async updateUser(id: number, params: IUpdateUserParams): Promise<IUser> {
+        const user = await this.retrieveUserById(id);
+        if (!user) throw new Error("No user found ");
+
+        const updatedUser = Object.assign(user, params);
+        await this.getUserRepository().save(updatedUser);
+        
+        return updatedUser;
     }
 }
 

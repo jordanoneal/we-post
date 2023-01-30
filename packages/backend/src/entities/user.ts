@@ -8,7 +8,7 @@ export class User implements IUser {
     constructor(data?: ICreateUserParams) {
         if (data) Object.assign(this, data);
     }
-    
+
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -24,13 +24,13 @@ export class User implements IUser {
     @Column({ type: 'varchar', unique: true, length: 50 })
     email!: string;
 
-    @Column()
+    @Column({ nullable: true })
     bio!: string;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     followers!: IUser[];
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', nullable: true })
     following!: IUser[];
 
     @OneToMany(() => Comment, (comment) => comment.author)

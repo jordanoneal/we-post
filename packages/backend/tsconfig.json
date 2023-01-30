@@ -5,9 +5,6 @@
     "rootDir": "./src",
     "paths": {
       "common.interfaces": ["../common/lib/interfaces"],
-      // "backend.services": ["./dist/services"],
-      // "backend.entities": ["./dist/entities"]
-      // "common.interfaces": ["../common/src/interfaces"],
       "backend.services": ["./src/services"],
       "backend.entities": ["./src/entities"]
     },
