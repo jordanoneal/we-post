@@ -4,6 +4,7 @@ import { IUser } from "./user";
 export interface IComment {
     id: number;
     text: string;
+    // edited: boolean;
 
     author: IUser;
     post: IPost;

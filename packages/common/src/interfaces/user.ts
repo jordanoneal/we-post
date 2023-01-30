@@ -7,13 +7,13 @@ export interface IUser {
     lastName: string;
     username: string;
     email: string;
-    bio: string;
+    bio?: string;
 
-    followers: IUser[];
-    following: IUser[];
+    followers?: IUser[];
+    following?: IUser[];
 
-    posts: IPost[];
-    comments: IComment[];
+    posts?: IPost[];
+    comments?: IComment[];
 
     createdAt: Date;
     updatedAt: Date;
@@ -25,4 +25,9 @@ export interface ICreateUserParams {
     lastName: string;
     username: string;
     email: string;
+}
+
+export interface IUpdateUserParams {
+    username?: string;
+    bio?: string;
 }
