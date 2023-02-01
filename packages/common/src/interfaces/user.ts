@@ -6,6 +6,7 @@ export interface IUser {
     firstName: string;
     lastName: string;
     username: string;
+    password: string;
     email: string;
     bio?: string;
 
@@ -24,6 +25,7 @@ export interface ICreateUserParams {
     firstName: string;
     lastName: string;
     username: string;
+    password: string;
     email: string;
 }
 

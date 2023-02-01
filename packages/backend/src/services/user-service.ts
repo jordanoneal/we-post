@@ -1,6 +1,7 @@
 import { ICreateUserParams, IUpdateUserParams, IUser } from "common.interfaces";
 import { getRepository, Repository } from "typeorm";
 import { User } from "../entities/user";
+import { hashPassword } from "./login";
 
 class UserService {
     private userRepository!: Repository<User>;
@@ -18,14 +19,16 @@ class UserService {
         const user = await this.getUserRepository().findOne({
             where: {
                 id: id
-            }
+            },
+            relations: ['posts', 'comments']
         })
         if (!user) throw new Error('Could not retrieve User by id');
         return user;
     }
 
     public async createUser(params: ICreateUserParams): Promise<IUser> {
-        const user = new User({ ...params });
+        const password = await hashPassword(params.password);
+        const user = new User({ ...params, password });
 
         return await this.getUserRepository().save(user);
     }
@@ -36,7 +39,7 @@ class UserService {
 
         const updatedUser = Object.assign(user, params);
         await this.getUserRepository().save(updatedUser);
-        
+
         return updatedUser;
     }
 }

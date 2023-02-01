@@ -5,6 +5,7 @@ import { commentRouter } from './routes/comment';
 import { userRouter } from './routes/user';
 import { postRouter } from './routes/post';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 class Server {
     public app = express();
@@ -16,6 +17,11 @@ const server = new Server();
 const initializeRoutes = () => {
     console.log('Initializing routes...');
 
+    server.app.use(cors({
+        credentials: true,
+        origin: 'http://localhost:3001',
+        allowedHeaders: ['Content-Type', 'Authorization']
+    }));
     server.app.use(bodyParser.json());
 
     server.app.use('/comments', commentRouter);

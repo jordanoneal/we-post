@@ -24,6 +24,9 @@ export class User implements IUser {
     @Column({ type: 'varchar', unique: true, length: 50 })
     email!: string;
 
+    @Column({ type: 'varchar' })
+    password!: string;
+
     @Column({ nullable: true })
     bio!: string;
 
