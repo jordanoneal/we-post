@@ -9,6 +9,7 @@ export interface IUser {
     password: string;
     email: string;
     bio?: string;
+    refreshToken?: string;
 
     followers?: IUser[];
     following?: IUser[];
@@ -32,4 +33,5 @@ export interface ICreateUserParams {
 export interface IUpdateUserParams {
     username?: string;
     bio?: string;
+    refreshToken?: string | null;
 }

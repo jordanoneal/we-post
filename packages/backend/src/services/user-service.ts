@@ -42,6 +42,16 @@ class UserService {
 
         return updatedUser;
     }
+
+    public async retrieveUserByRefreshToken(refreshToken: string): Promise<IUser> {
+        const user = await this.getUserRepository().findOne({
+            where: {
+                refreshToken: refreshToken
+            }
+        })
+        if (!user) throw new Error('Could not retrieve User by refreshToken');
+        return user;
+    }
 }
 
 const instance = new UserService();

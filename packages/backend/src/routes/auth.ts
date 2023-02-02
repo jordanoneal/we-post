@@ -8,8 +8,6 @@ import { generateAccessToken, generateRefreshToken } from '../services/auth';
 
 const auth = express.Router();
 
-let refreshTokens: string[] = [];
-
 auth.route('/login')
     .post(async (req, res) => {
         try {
@@ -27,7 +25,7 @@ auth.route('/login')
             const accessToken = generateAccessToken(payload);
             const refreshToken = generateRefreshToken(payload);
 
-            refreshTokens.push(refreshToken);
+            await UserService.updateUser(user.id, { refreshToken });
 
             return res.status(201).json({ accessToken, refreshToken });
         }
@@ -43,14 +41,16 @@ auth.route('/token')
             const { refreshToken } = req.body;
             if (!refreshToken) return res.status(401).json('Not Allowed');
 
-            if (!refreshTokens.includes(refreshToken)) return res.status(401).json('Not Allowed');
+            jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err: any, user: any) => {
+                const userFromDB = await UserService.retrieveUserById(user.id);
 
-            const user = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET) as IUser;
-            const payload = { id: user.id, username: user.username, email: user.email };
+                if (userFromDB.refreshToken !== refreshToken) return res.status(401).json('Not Allowed');
 
-            const accessToken = generateAccessToken(payload);
+                const payload = { id: userFromDB.id, username: userFromDB.username, email: userFromDB.email };
+                const accessToken = generateAccessToken(payload);
 
-            return res.status(201).json({ accessToken });
+                return res.status(201).json({ accessToken });
+            })
         }
         catch (err: any) {
             return res.status(400).json(err.toString());
@@ -59,14 +59,15 @@ auth.route('/token')
 
 // Revoke refresh token
 auth.route('/logout')
-    .delete((req, res) => {
+    .delete(async (req, res) => {
         try {
             const { refreshToken } = req.body;
             if (!refreshToken) return res.status(401).json('Not Allowed');
 
-            if (!refreshTokens.includes(refreshToken)) return res.status(401).json('Not Allowed');
+            const user = await UserService.retrieveUserByRefreshToken(refreshToken);
+            if (!user) return res.status(401).json('Not Allowed');
 
-            refreshTokens = refreshTokens.filter(token => token !== refreshToken);
+            await UserService.updateUser(user.id, { refreshToken: null });
 
             return res.status(200).json('Logged out');
         }

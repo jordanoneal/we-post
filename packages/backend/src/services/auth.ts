@@ -12,7 +12,7 @@ export const comparePassword = async (password: string, hash: string): Promise<b
 }
 
 export const generateAccessToken = (user: { id: number, username: string, email: string }) => {
-    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '15s' });
+    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '15m' });
     return token;
 }
 

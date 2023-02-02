@@ -30,6 +30,9 @@ export class User implements IUser {
     @Column({ nullable: true })
     bio!: string;
 
+    @Column({ nullable: true })
+    refreshToken!: string;
+
     @Column({ type: 'jsonb', nullable: true })
     followers!: IUser[];
 
