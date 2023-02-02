@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateAccount() {
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -37,7 +37,7 @@ export default function CreateAccount() {
 
   const navigateToHome = () => {
     setTimeout(() => {
-      naviagte('/');
+      navigate('/');
     }, 1000)
   }
 
