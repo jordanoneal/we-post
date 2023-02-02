@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { ICreateUserParams } from '../../../../common/src/interfaces';
+import { ICreateUserParams } from '@common.interfaces';
 import { CreateUser } from '../../services/user'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateAccount() {
+  const naviagte = useNavigate();
+
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -20,20 +23,26 @@ export default function CreateAccount() {
       password,
     }
 
-    if (!firstName || !lastName || !email || !username || !password) {
-      toast.error('Please fill out all fields');
-      console.log('Please fill out all fields');
-      return;
-    }
+    if (!firstName || !lastName || !email || !username || !password) 
+    return toast.error('Please fill out all fields');
 
     const user = await CreateUser(createParams);
-
-    return user;
+    if (user) {
+      toast.success('Account created successfully');
+      navigateToHome();
+      return user;
+    }
+    return toast.error('Something went wrong. Please try again.')
   }
 
+  const navigateToHome = () => {
+    setTimeout(() => {
+      naviagte('/');
+    }, 1000)
+  }
 
   return (
-    <div className='flex justify-center items-center w-full h-screen'>
+    <div className='flex justify-center items-center w-full h-full'>
       <form>
         <div>
           <label htmlFor='firstName'>First Name</label>
@@ -59,7 +68,7 @@ export default function CreateAccount() {
           <label htmlFor='confirmPassword'>Verify Password</label>
           <input className='border' type="password" value={verifyPassword} onChange={(e) => setVerifyPassword(e.target.value)} />
         </div>
-        <button className='bg-blue-500 p-2 rounded' type='button' onClick={handleSubmit}>Submit</button>
+        <button className='bg-twitter-blue p-2 mt-3 rounded' type='button' onClick={handleSubmit}>Submit</button>
       </form>
     </div>
   )
