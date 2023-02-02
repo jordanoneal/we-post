@@ -24,3 +24,9 @@ export const DB_NAME = process.env.DB_NAME;
 
 if (!process.env.DB_PASSWORD) throw new Error('DB_PASSWORD is not defined!');
 export const DB_PASSWORD = process.env.DB_PASSWORD;
+
+if(!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not defined!');
+export const JWT_SECRET = process.env.JWT_SECRET;
+
+if(!process.env.REFRESH_TOKEN_SECRET) throw new Error('REFRESH_TOKEN_SECRET is not defined!');
+export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;

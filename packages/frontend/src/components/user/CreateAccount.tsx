@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ICreateUserParams } from '../../../../common/src/interfaces';
 import { CreateUser } from '../../services/user'
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function CreateAccount() {
   const [firstName, setFirstName] = useState<string>('');
@@ -8,7 +9,7 @@ export default function CreateAccount() {
   const [email, setEmail] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [verifyPassword, setVerifyPassword] = useState<string>();
+  const [verifyPassword, setVerifyPassword] = useState<string>('');
 
   const handleSubmit = async () => {
     const createParams: ICreateUserParams = {
@@ -20,6 +21,7 @@ export default function CreateAccount() {
     }
 
     if (!firstName || !lastName || !email || !username || !password) {
+      toast.error('Please fill out all fields');
       console.log('Please fill out all fields');
       return;
     }
@@ -31,7 +33,7 @@ export default function CreateAccount() {
 
 
   return (
-    <div className='flex justify-center items-center w-full h-full'>
+    <div className='flex justify-center items-center w-full h-screen'>
       <form>
         <div>
           <label htmlFor='firstName'>First Name</label>
@@ -55,7 +57,7 @@ export default function CreateAccount() {
         </div>
         <div>
           <label htmlFor='confirmPassword'>Verify Password</label>
-          <input className='border' type="password" value={verifyPassword} />
+          <input className='border' type="password" value={verifyPassword} onChange={(e) => setVerifyPassword(e.target.value)} />
         </div>
         <button className='bg-blue-500 p-2 rounded' type='button' onClick={handleSubmit}>Submit</button>
       </form>

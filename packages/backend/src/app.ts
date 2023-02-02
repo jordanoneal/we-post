@@ -6,6 +6,7 @@ import { userRouter } from './routes/user';
 import { postRouter } from './routes/post';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { authRouter } from './routes/auth';
 
 class Server {
     public app = express();
@@ -23,6 +24,8 @@ const initializeRoutes = () => {
         allowedHeaders: ['Content-Type', 'Authorization']
     }));
     server.app.use(bodyParser.json());
+
+    server.app.use('/auth', authRouter);
 
     server.app.use('/comments', commentRouter);
     server.app.use('/users', userRouter);

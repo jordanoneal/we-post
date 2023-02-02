@@ -1,7 +1,7 @@
 import { ICreateUserParams, IUpdateUserParams, IUser } from "common.interfaces";
 import { getRepository, Repository } from "typeorm";
 import { User } from "../entities/user";
-import { hashPassword } from "./login";
+import { hashPassword } from "./auth";
 
 class UserService {
     private userRepository!: Repository<User>;

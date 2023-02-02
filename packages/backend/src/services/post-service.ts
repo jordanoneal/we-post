@@ -12,7 +12,9 @@ class PostService {
     }
 
     public async retrieveAllPosts(): Promise<IPost[]> {
-        return await this.getPostRepository().find();
+        return await this.getPostRepository().find({
+            relations: ['author', 'comments', 'comments.author']
+        });
     };
 
     public async retrievePostById(id: number): Promise<IPost> {

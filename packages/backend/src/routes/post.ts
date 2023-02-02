@@ -1,6 +1,7 @@
 import express from 'express';
 import { PostService } from '../services/post-service';
 import { ICreatePostParams, IUpdatePostParams } from 'common.interfaces';
+import { authenticate } from '../middleware/auth/validation';
 
 const post = express.Router();
 
@@ -24,6 +25,14 @@ post.route('/')
         catch (err: any) {
             return res.status(400).json(err.toString());
         }
+    })
+
+post.route('/test')
+    .get(authenticate, async (req, res) => {
+        const posts = await PostService.retrieveAllPosts();
+        const userPosts = posts.filter(post => post.author.id === req.body.user.id);
+        
+        return res.status(200).json(userPosts);
     })
 
 post.route('/:id')
@@ -57,7 +66,7 @@ post.route('/:id')
 
             return res.status(200).json(response);
         }
-        catch(err: any) {
+        catch (err: any) {
             return res.status(400).json(err.toString());
         }
     })
