@@ -7,6 +7,7 @@ import { postRouter } from './routes/post';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { authRouter } from './routes/auth';
+import { authenticate } from './middleware/auth/validation';
 
 class Server {
     public app = express();
@@ -27,6 +28,7 @@ const initializeRoutes = () => {
 
     server.app.use('/auth', authRouter);
 
+    // server.app.use(authenticate);
     server.app.use('/comments', commentRouter);
     server.app.use('/users', userRouter);
     server.app.use('/posts', postRouter);

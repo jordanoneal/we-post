@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify'
+import useAuth from '../../hooks/useAuth';
+import { LoginUser } from '../../services/auth';
 
 export default function Login() {
+  const { setAuth } = useAuth();
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleLogin = async () => {
     if (!username || !password) return toast.error('Please fill in all fields')
     // TODO: Handle login
+    const response = await LoginUser(username, password);
+    setAuth({ username, password, response });
+
+    if (!response) return toast.error('Login failed')
+    return response;
   }
 
   return (
@@ -36,7 +46,7 @@ export default function Login() {
           />
         </div>
         <button
-          className="bg-twitter-blue text-white font-medium py-2 px-4 rounded hover:bg-twitter-dark"
+          className="bg-twitter-blue text-white font-medium py-2 px-4 rounded hover:bg-blue-500"
           type="button"
           onClick={handleLogin}
         >
