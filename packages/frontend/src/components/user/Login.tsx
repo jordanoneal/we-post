@@ -1,12 +1,8 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify'
-import useAuth from '../../hooks/useAuth';
 import { LoginUser } from '../../services/auth';
 
 export default function Login() {
-  const { setAuth } = useAuth();
-
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -14,8 +10,6 @@ export default function Login() {
     if (!username || !password) return toast.error('Please fill in all fields')
     // TODO: Handle login
     const response = await LoginUser(username, password);
-    setAuth({ username, password, response });
-
     if (!response) return toast.error('Login failed')
     return response;
   }
