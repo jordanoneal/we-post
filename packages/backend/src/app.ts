@@ -21,13 +21,19 @@ const initializeRoutes = () => {
 
     server.app.use(cors({
         credentials: true,
-        origin: 'http://localhost:3001',
+        origin: (origin, callback) => {
+            // Check if the origin is a localhost URL
+            if (!origin) return callback(null, true);
+
+            const isLocalhost = /^https?:\/\/localhost(?::\d+)?$/.test(origin);
+            callback(null, isLocalhost);
+        },
         allowedHeaders: ['Content-Type', 'Authorization']
     }));
+
     server.app.use(bodyParser.json());
 
     server.app.use('/auth', authRouter);
-
     // server.app.use(authenticate);
     server.app.use('/comments', commentRouter);
     server.app.use('/users', userRouter);
